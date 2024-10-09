@@ -6,32 +6,44 @@ public class PlayerMovement : MonoBehaviour
 {
     //Thiago Grossi esteve aqui...
 
-    public Rigidbody body;
-
+    Rigidbody rb;
     public SpriteRenderer spriteRenderer;
 
-    public float walkSpeed;
-
     Vector3 direction;
+    public float walkSpeed, jumpForce;
+
+    public bool isGrounded;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Movement();
+        Jump();
     }
 
     void Movement()
     {
-        direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        if(isGrounded)
+        {
+            direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
-        //set walk based on direction
-        body.velocity = direction * walkSpeed;
+            //set walk based on direction
+            rb.velocity = new Vector3(direction.x * walkSpeed, rb.velocity.y, direction.z * walkSpeed);
+        }
+    }
+
+    void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     void GetSpriteDirection()
@@ -69,4 +81,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Floor")
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.transform.tag == "Floor")
+        {
+            isGrounded = false;
+        }
+    }
 }

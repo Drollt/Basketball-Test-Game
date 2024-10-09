@@ -83,7 +83,7 @@ public class CatchBall : MonoBehaviour
     {
         if (InBallHands)
         {
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.X))
             {
                 DrawPath();
                 if (bola == true && BallInHands == true)
@@ -102,7 +102,7 @@ public class CatchBall : MonoBehaviour
                 ball.position = PosDribble.position + Vector3.up * Mathf.Abs(Mathf.Sin(Time.time * 5));
             }
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.X))
             {
                 if (prepareToShoot)
                 {
